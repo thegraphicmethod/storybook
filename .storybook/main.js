@@ -14,6 +14,7 @@ const config = {
         },
       },
     },
+    'storybook-source-code-addon',
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
