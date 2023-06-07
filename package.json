@@ -1,0 +1,55 @@
+{
+  "name": "intro-storybook-vue-template",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Starter template to get up and running quickly with Vue and Storybook",
+  "author": "Chromatic <https://chromatic.com/>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chromaui/intro-storybook-vue-template"
+  },
+  "bugs": {
+    "url": "https://github.com/chromaui/intro-storybook-vue-template/issues"
+  },
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "format": "prettier --write src/",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "init-msw": "msw init public/"
+  },
+  "dependencies": {
+    "vue": "^3.2.47"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.2.0",
+    "@storybook/addon-essentials": "^7.0.6",
+    "@storybook/addon-interactions": "^7.0.6",
+    "@storybook/addon-links": "^7.0.6",
+    "@storybook/addon-postcss": "^2.0.0",
+    "@storybook/blocks": "^7.0.6",
+    "@storybook/testing-library": "^0.0.14-next.2",
+    "@storybook/vue3": "^7.0.6",
+    "@storybook/vue3-vite": "^7.0.6",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/eslint-config-prettier": "^7.1.0",
+    "autoprefixer": "^10.4.14",
+    "eslint": "^8.34.0",
+    "eslint-plugin-storybook": "^0.6.11",
+    "eslint-plugin-vue": "^9.9.0",
+    "msw": "^1.2.1",
+    "msw-storybook-addon": "^1.8.0",
+    "postcss": "^8.4.24",
+    "prettier": "^2.8.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "storybook": "^7.0.6",
+    "storybook-source-code-addon": "^1.2.0",
+    "tailwindcss": "^3.3.2",
+    "vite": "^4.1.4"
+  }
+}
