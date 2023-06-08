@@ -1,19 +1,21 @@
 <template>
   <div class="relative">
     <svg class="mt-8" :style="{ width: width + 'px', height: height + 'px' }">
-      <g
-        :transform="`translate(${zoomData.x}, ${zoomData.y}) scale(${zoomData.scale}, ${zoomData.scale})`"
-      >
+      <g>
         <g>
           <MapPathSingle
-            v-for="geo in pathAndData"
-            :id="geo.id"
-            :key="geo.id"
-            :d="geo.path"
-            :color="geo.color"
-            @_mouseover="mouseoverHandler($event, geo.id)"
-            @_mouseout="mouseoutHandler($event, geo.id)"
-            @_click="clickHandler($event, geo.id)"
+            v-for="geoObj in pathAndData"
+            :id="geoObj.id"
+            :key="geoObj.id"
+            :d="geoObj.path"
+            :color="geoObj.color"
+            :hoveredColor="geoObj.colorHovered"            
+            :showHoverState="!geoObj.nonAvailableData"
+            :showStrokeHovered="true"
+            strokeHoveredColor="black"
+            @_mouseover="mouseoverHandler($event, geoObj.id)"
+            @_mouseout="mouseoutHandler($event, geoObj.id)"
+            @_click="clickHandler($event, geoObj.id)"
           ></MapPathSingle>
         </g>
       </g>
@@ -25,11 +27,12 @@
 </template>
 
 <script>
-import * as d3 from 'd3'
 import * as geo from 'd3-geo'
+import { scaleQuantile,color} from 'd3'
 import MapPathSingle from './MapPathSingle.vue'
 import MapLegend from './MapLegend.vue'
 import {get} from 'lodash'
+
 export default {
   components: {
     MapPathSingle,
@@ -68,6 +71,25 @@ export default {
       type: String,
       default: 'properties.name'
     },
+    /**
+     * The name of the projection that will be used to draw the map included in d3-geo
+     */
+    projectionName: {
+      type: String,
+      default: 'geoMercator'
+    },
+    /**
+     * The scale of the projection. If not provided, the map will fit the geometry of the geo data
+     * If you provide this value you also need to provide the center
+     */
+    projectionScale: {
+      type: Number,
+      default: NaN
+    },
+    center: {
+      type: Array,
+      default: () => null
+    },
 
     /**
      * The field name in the data that will be used to join the data
@@ -103,20 +125,13 @@ export default {
     return {
       geoPath: geo.geoPath(),
       pathAndData: [],
-      zoomData: {
-        scale: 0.15,
-        x: 500,
-        y: 300
-      },
-      zoomGeoId: null
+   
+   
     }
   },
   computed: {
-
-
     colorScale() {
-      return d3
-        .scaleQuantile()
+      return scaleQuantile()
         .domain(this.OnlyValuesArray)
         .range(this.colors)
     },
@@ -131,10 +146,7 @@ export default {
     },
     data() {
       this.setGeoJsoDataStates()
-    },
-    outsideHighLight(newValue) {
-      if (newValue == 0) this.zoomOut()
-    },
+    },    
     metricObject() {
       this.BuildPathAndData()
     }
@@ -150,22 +162,27 @@ export default {
       this.pathAndData = this.geoMap.features.map((d) => {
         const _id= get(d, `${this.fielIdInGeoData}`)+''
         const _name = get(d, `${this.fieldNameInGeoData}`)
+        const value = this.valueFromData(_id)
         return {
           path: this.geoPath(d),
           id: _id,
           name: _name,
           bounds: this.geoPath.bounds(d),
-          value: this.valueFromData(_id),
+          value,
           color: this.colorFromData(_id),
-          nonAvailableData: this.valueFromData==='N/A'
+          colorHovered: this.colorFromData(_id),
+          nonAvailableData: value==='N/A'
         }
       })
     },
-    resetProjection(projectionRatio = 1.1) {
-      this.projection = geo
-        .geoMercator()
-        .scale(this.width * projectionRatio)
-        .translate([this.width / 2, this.height / 2])
+    resetProjection() {
+      this.projection = geo[this.projectionName]() 
+      if( this.center && this.center.length>0 && !isNaN(this.projectionScale)){
+        this.projection.center(this.center)
+        this.projection.scale(this.projectionScale)
+      }
+      else 
+        this.projection.fitSize([this.width,this.height], this.geoMap)       
       this.geoPath.projection(this.projection)
     },
     datumFromGeoId(geoId) {
@@ -200,15 +217,7 @@ export default {
       return 'N/A'
     },
 
-    zoomOut() {
-      this.zoomData = {
-        scale: 0.25,
-        x: 0,
-        y: 0
-      }
-      this.showZoomControls = false
-    },
-
+  
     clickHandler(event, geoid) {
       const pathAndDataObj = this.pathAndData.find((d) => d.id === geoid)
       if(pathAndDataObj.nonAvailableData) return
@@ -235,26 +244,5 @@ export default {
 </script>
 
 <style lang="css" scoped>
-path.state {
-  stroke: #333;
-  stroke-width: 0.5px;
-}
 
-path.state {
-  pointer-events: none;
-}
-
-path.state.selectionable {
-  cursor: pointer;
-  pointer-events: all;
-}
-path.state:hover,
-path.state {
-  transition: fill 0.5s ease-in-out;
-}
-
-path.selected {
-  stroke: #112a45;
-  stroke-width: 2px;
-}
 </style>

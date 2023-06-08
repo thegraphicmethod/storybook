@@ -1,6 +1,6 @@
 <template>
     <div>
-        <WorldMap
+        <GenericMap
         :width="width"
         :height="height"
         :geoMap="worldmapGeo"
@@ -8,8 +8,7 @@
         :metricObject="metricObject"
         @_mouseover="onMouseOver"
         @_mouseout="onMouseOut"
-        @_click="onClick"
-        ></WorldMap>
+        ></GenericMap>
         <TooltipGlobal>
             <template #header>                
                 <h1 class="text-2xl font-bold">Global</h1>                
@@ -22,9 +21,8 @@
 </template>
 
 <script setup>
-import WorldMap from './WorldMap.vue'
+import GenericMap from './GenericMap.vue'
 import TooltipGlobal from '../interface/TooltipGlobal.vue'
-import { reactive, computed } from 'vue';
 import * as worldmapGeo from '../../assets/world-110m.json'
 import { useTooltip } from "@/composables/useTooltip";
 const tooltip = useTooltip();

@@ -1,21 +1,29 @@
-import  WorldMap  from '@/components/ChoroMaps/WorldMap.vue'
-import WorldMapSource from '@/components/ChoroMaps/WorldMap.vue?raw'
+import  GenericMap  from '@/components/ChoroMaps/GenericMap.vue'
+import GenericMapSource from '@/components/ChoroMaps/GenericMap.vue?raw'
 import * as worldmapGeo from '@/assets/world-110m.json'
 import * as spainMapGeo from '@/assets/shapefiles_provincias_espana.json'
 
 export default {
   title: 'Maps/WorldMap',
-  component: WorldMap,
+  component: GenericMap,
   tags: ['autodocs'],
   argTypes: { 
     _click: { action: '_click' },
     _mouseover: { action: '_mouseover' },
+    projectionName: {
+      control: {
+        type: 'select',
+      },
+      options: ['geoMercator', 'geoConicEquidistant'],
+    },
   },
+  
   parameters: {
     componentSource: {
-      code: WorldMapSource,
+      code: GenericMapSource,
       language: 'vue',
     },
+    
   },
 
 }
@@ -40,7 +48,9 @@ export const DefaultWorldMap = {
         {_id: "BEL", Total: 11348159},
         {_id: "BEN", Total: 10872298},
     ],
-    geoMap: worldmapGeo,        
+    geoMap: worldmapGeo,    
+    projectionScale: 200,
+    center: [0.2085, 30],    
   }
 }
 
@@ -56,6 +66,7 @@ export const SpainMap = {
         ],
         geoMap: spainMapGeo,
         fielIdInGeoData: 'properties.id',
-        fieldNameInGeoData: 'properties.texto'
+        fieldNameInGeoData: 'properties.texto',
+
     }
 }
