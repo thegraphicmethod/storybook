@@ -1,5 +1,5 @@
-import TooltipGlobal from '@/components/interface/TooltipGlobal.vue'
-import TooltipGlobalRaw from '@/components/interface/TooltipGlobal.vue?raw'
+import TooltipGlobal from '@/components/Interface/TooltipGlobal.vue'
+import TooltipGlobalRaw from '@/components/Interface/TooltipGlobal.vue?raw'
 // More on how to set up stories at: https://storybook.js.org/docs/vue/writing-stories/introduction
 export default {
   title: 'Interface/TooltipGlobal',

@@ -22,7 +22,7 @@
 
 <script setup>
 import GenericMap from './GenericMap.vue'
-import TooltipGlobal from '../interface/TooltipGlobal.vue'
+import TooltipGlobal from '../Interface/TooltipGlobal.vue'
 import * as worldmapGeo from '../../assets/world-110m.json'
 import { useTooltip } from "@/composables/useTooltip";
 const tooltip = useTooltip();
