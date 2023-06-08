@@ -23,6 +23,10 @@
     "init-msw": "msw init public/"
   },
   "dependencies": {
+    "@vueuse/core": "^10.1.2",
+    "d3": "^7.8.5",
+    "d3-geo": "^3.1.0",
+    "lodash": "^4.17.21",
     "vue": "^3.2.47"
   },
   "devDependencies": {
